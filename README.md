@@ -185,6 +185,24 @@ Applied to **48,744 new applicants** from `application_test.csv`:
 
 ---
 
+## 💰 Business Simulation
+
+Using LightGBM Tuned, a business impact simulation was conducted to quantify the financial benefit of model deployment.
+
+**Baseline (No Model):**
+- Total defaulters: 24,825 applicants
+- Estimated total loss: **IDR 8.29 Triliun** (assuming 60% Loss Given Default)
+
+**Model Impact at Threshold 0.5 (Recommended):**
+- Defaults prevented: **1,320 applicants** (5.32% recall)
+- Loss prevented: **IDR 0.44 Triliun**
+- Opportunity cost (good applicants rejected): IDR 0.86 Triliun
+
+**Key Insight:**
+At all tested thresholds (0.20 - 0.50), opportunity cost exceeds loss prevented due to low recall at default threshold. Threshold 0.5 remains the most cost-efficient option with the highest precision (48.09%). Achieving positive net benefit requires precision improvement above 50% through further feature engineering or ensemble methods.
+
+---
+
 ## 🛠 Tech Stack
 
 - **Language**: Python 3.14
@@ -198,20 +216,20 @@ Applied to **48,744 new applicants** from `application_test.csv`:
 
 ---
 
-## 📁 Project Structure
-Home_Credit_Scorecard_Model/
-├── EDA_application_train.ipynb
-├── EDA_bureau_and_bureau_balance.ipynb
-├── EDA_previous_application.ipynb
-├── EDA_POS_CASH_balance.ipynb
-├── EDA_credit_card_balance.ipynb
-├── EDA_installments_payments.ipynb
-├── EDA_merged.ipynb
-├── Merged_Dataset.ipynb
-├── Data Cleaning and Handling.ipynb
-├── Train_Model.ipynb
-├── Credit_Scoring.ipynb
-└── README.md
+## 📁 Project Structure  
+Home_Credit_Scorecard_Model  
+├── EDA_application_train.ipynb  
+├── EDA_bureau_and_bureau_balance.ipynb  
+├── EDA_previous_application.ipynb  
+├── EDA_POS_CASH_balance.ipynb  
+├── EDA_credit_card_balance.ipynb  
+├── EDA_installments_payments.ipynb  
+├── EDA_merged.ipynb  
+├── Merged_Dataset.ipynb  
+├── Data Cleaning and Handling.ipynb  
+├── Train_Model.ipynb  
+├── Credit_Scoring.ipynb  
+└── README.md  
 
 ---
 
