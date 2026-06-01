@@ -224,7 +224,6 @@ Home_Credit_Scorecard_Model
 ├── EDA_POS_CASH_balance.ipynb  
 ├── EDA_credit_card_balance.ipynb  
 ├── EDA_installments_payments.ipynb  
-├── EDA_merged.ipynb  
 ├── Merged_Dataset.ipynb  
 ├── Data Cleaning and Handling.ipynb  
 ├── Train_Model.ipynb  
