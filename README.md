@@ -1,4 +1,4 @@
-# 🏦 Home Credit Default Risk — Scorecard Model  
+# 🏦 Home Credit Default Risk — Scorecard Model  s
 
 **Author:** Oknardo Tulung  
 **Role:** Data Scientist Intern — Home Credit Indonesia  
@@ -73,14 +73,27 @@ graph TD
 | 4 | `EDA_POS_CASH_balance.ipynb` | EDA on POS and cash loan history |
 | 5 | `EDA_credit_card_balance.ipynb` | EDA on credit card balance history |
 | 6 | `EDA_installments_payments.ipynb` | EDA on installment payment history |
-| 7 | `EDA_merged.ipynb` | EDA on merged dataset |
-| 8 | `Merged_Dataset.ipynb` | Data aggregation and merging pipeline |
-| 9 | `Data Cleaning and Handling.ipynb` | Data cleaning and feature engineering |
-| 10 | `Train_Model.ipynb` | Model training, evaluation, and SHAP analysis |
-| 11 | `Credit_Scoring.ipynb` | Credit scoring on new applicants |
+| 7 | `Merged_Dataset.ipynb` | Data aggregation and merging pipeline |
+| 8 | `Data Cleaning and Handling.ipynb` | Data cleaning and feature engineering |
+| 9 | `Train_Model.ipynb` | Model training, evaluation, and SHAP analysis |
+| 10 | `Credit_Scoring.ipynb` | Credit scoring on new applicants |
 
 ---
 
+## 📋 Data Pipeline Overview
+application_train (307K) + 6 supplementary tables (61M+ rows)  
+       ↓  
+EDA (7 notebooks) → identify patterns, anomalies, feature signals  
+       ↓  
+Merged_Dataset.ipynb → aggregate + merge → 265 features  
+       ↓  
+Data Cleaning and Handling.ipynb → 241 features, 0 missing  
+       ↓  
+Train_Model.ipynb → 6 models + tuning + SHAP + business simulation  
+       ↓  
+Credit_Scoring.ipynb → score 48,744 new applicants  
+  
+--- 
 ## 🔍 EDA Key Findings
 
 ### application_train
