@@ -200,21 +200,108 @@ Applied to **48,744 new applicants** from `application_test.csv`:
 
 ## 💰 Business Simulation
 
-Using LightGBM Tuned, a business impact simulation was conducted to quantify the financial benefit of model deployment.
+Using LightGBM Tuned, a business impact simulation was conducted to quantify the financial benefit of model deployment across multiple classification thresholds.
+
+> **Note:** Monetary figures use original dataset units without currency conversion. All values are illustrative.
 
 **Baseline (No Model):**
-- Total defaulters: 24,825 applicants
-- Estimated total loss: **IDR 8.29 Triliun** (assuming 60% Loss Given Default)
+- Total defaulters: 24,825 (8.07% default rate)
+- Average credit per defaulter: 556,579 units
+- Loss Given Default (LGD): 60%
+- **Total estimated portfolio loss: 8.29 Billion units**
 
-**Model Impact at Threshold 0.5 (Recommended):**
-- Defaults prevented: **1,320 applicants** (5.32% recall)
-- Loss prevented: **IDR 0.44 Triliun**
-- Opportunity cost (good applicants rejected): IDR 0.86 Triliun
+**Threshold Simulation Results:**
 
-**Key Insight:**
-At all tested thresholds (0.20 - 0.50), opportunity cost exceeds loss prevented due to low recall at default threshold. Threshold 0.5 remains the most cost-efficient option with the highest precision (48.09%). Achieving positive net benefit requires precision improvement above 50% through further feature engineering or ensemble methods.
+| Threshold | Recall | Precision | Defaults Prevented | Remaining Defaults | Loss Prevented | Opportunity Cost | Net Benefit |
+|---|---|---|---|---|---|---|---|
+| 0.50 | 5.32% | 48.09% | 1,320 | 23,505 | 440.81M units | 854.71M units | -413.90M units |
+| 0.40 | 11.20% | 43.61% | 2,780 | 22,045 | 928.37M units | 2,156.26M units | -1,227.89M units |
+| 0.35 | 15.35% | 40.15% | 3,810 | 21,015 | 1,272.34M units | 3,406.84M units | -2,134.50M units |
+| 0.30 | 21.01% | 37.33% | 5,215 | 19,610 | 1,741.54M units | 5,251.21M units | -3,509.67M units |
+| 0.25 | 27.81% | 33.58% | 6,905 | 17,920 | 2,305.91M units | 8,190.20M units | -5,884.29M units |
+| 0.20 | 36.98% | 28.99% | 9,180 | 15,645 | 3,065.64M units | 13,489.39M units | -10,423.75M units |
 
+**Key Insights:**
+
+**Threshold 0.5 is the Most Cost-Efficient**
+At the recommended threshold of 0.5, the model identifies and prevents approval of **1,320 high-risk applicants** out of 24,825 total defaulters, reducing estimated portfolio losses by **440.81 million units**. This threshold achieves the highest precision (48.09%) and the most favorable loss-prevented to opportunity-cost ratio among all thresholds tested.
+
+**23,505 Defaulters Remain Undetected**
+At threshold 0.5, **23,505 defaulters still pass through** undetected, representing a remaining estimated loss of **7.85 billion units**. This reflects the fundamental precision-recall trade-off of gradient boosting models on heavily imbalanced datasets.
+
+**Opportunity Cost Dominates at All Thresholds**
+Across all tested thresholds, opportunity cost from incorrectly rejecting good applicants consistently exceeds loss prevented, resulting in negative net benefit at every threshold. At threshold 0.5, for every 1 defaulter correctly identified, approximately 1.08 good applicants are wrongly rejected. This ratio worsens to 2.45 at threshold 0.2.
+
+**Segmented Business Impact**
+The risk tier segmentation from `Credit_Scoring.ipynb` provides a more actionable deployment view:
+
+| Risk Tier | Applicants | % | Recommended Action |
+|---|---|---|---|
+| Low Risk (< 0.10) | 32,157 | 65.97% | Approve with standard terms |
+| Medium Risk (0.10-0.30) | 13,553 | 27.80% | Approve with enhanced monitoring |
+| High Risk (0.30-0.50) | 2,546 | 5.22% | Stricter evaluation or reduced principal |
+| Very High Risk (> 0.50) | 488 | 1.00% | Reject or require additional collateral |
+
+The **Very High Risk segment alone (488 applicants, 1%)** represents an estimated **163 million units** in preventable losses (488 × 556,579 × 60% LGD), making targeted rejection of this segment the most immediately actionable business recommendation.
+
+**Path to Positive Net Benefit**
+To achieve positive net benefit from model deployment, one or more of the following improvements is required:
+- **Precision above 50%** through further feature engineering, ensemble stacking, or cost-sensitive learning
+- **Cost-weighted threshold optimization** using actual business cost ratio of default loss vs rejected loan opportunity cost
+- **Segmented deployment** where the model is applied selectively to High Risk and Very High Risk segments, reducing opportunity cost while preserving most of the loss prevention benefit
 ---
+
+## 💰 Business Simulation
+
+Using LightGBM Tuned, a business impact simulation was conducted to quantify the financial benefit of model deployment across multiple classification thresholds.
+
+**Baseline (No Model):**
+- Total applicants: 307,511
+- Total defaulters: 24,825 (8.07% default rate)
+- Average credit per defaulter: IDR 556.6 million
+- Loss Given Default (LGD): 60%
+- **Total estimated portfolio loss: IDR 8.29 Trillion**
+
+**Threshold Simulation Results:**
+
+| Threshold | Recall | Precision | Defaults Prevented | Remaining Defaults | Loss Prevented | Opportunity Cost | Net Benefit |
+|---|---|---|---|---|---|---|---|
+| 0.50 | 5.32% | 48.09% | 1,320 | 23,505 | IDR 0.44T | IDR 0.86T | **-IDR 0.41T** |
+| 0.40 | 11.20% | 43.61% | 2,780 | 22,045 | IDR 0.93T | IDR 2.16T | **-IDR 1.23T** |
+| 0.35 | 15.35% | 40.15% | 3,810 | 21,015 | IDR 1.27T | IDR 3.41T | **-IDR 2.13T** |
+| 0.30 | 21.01% | 37.33% | 5,215 | 19,610 | IDR 1.74T | IDR 5.25T | **-IDR 3.51T** |
+| 0.25 | 27.81% | 33.58% | 6,905 | 17,920 | IDR 2.31T | IDR 8.19T | **-IDR 5.88T** |
+| 0.20 | 36.98% | 28.99% | 9,180 | 15,645 | IDR 3.07T | IDR 13.49T | **-IDR 10.42T** |
+
+**Key Insights:**
+
+**Threshold 0.5 is the Most Cost-Efficient**
+At the recommended threshold of 0.5, the model identifies and prevents approval of **1,320 high-risk applicants** out of 24,825 total defaulters, reducing estimated portfolio losses by **IDR 441 billion**. This threshold achieves the highest precision (48.09%) and the most favorable loss-prevented to opportunity-cost ratio among all thresholds tested.
+
+**23,505 Defaulters Remain Undetected**
+At threshold 0.5, **23,505 defaulters still pass through** undetected, representing a remaining estimated loss of IDR 7.85 Trillion. This reflects the model's low recall (5.32%) at the default threshold, a known trade-off of gradient boosting models on heavily imbalanced datasets.
+
+**Opportunity Cost Dominates at All Thresholds**
+Across all tested thresholds, opportunity cost from incorrectly rejecting good applicants consistently exceeds loss prevented, resulting in negative net benefit at every threshold. At threshold 0.5, for every 1 defaulter correctly identified, approximately 1.08 good applicants are wrongly rejected. This ratio worsens to 2.45 at threshold 0.2.
+
+**Segmented Business Impact**
+The risk tier segmentation from Credit_Scoring.ipynb provides a more actionable deployment view:
+
+| Risk Tier | Applicants | % | Recommended Action |
+|---|---|---|---|
+| Low Risk (< 0.10) | 32,157 | 65.97% | Approve — standard terms |
+| Medium Risk (0.10-0.30) | 13,553 | 27.80% | Approve — enhanced monitoring |
+| High Risk (0.30-0.50) | 2,546 | 5.22% | Stricter evaluation or reduced principal |
+| Very High Risk (> 0.50) | 488 | 1.00% | Reject or require additional collateral |
+
+The **Very High Risk segment alone (488 applicants, 1%)** represents an estimated **IDR 170 billion** in preventable losses (488 × IDR 556.6M × 60% LGD), making targeted rejection of this segment the most immediately actionable business recommendation.
+
+**Path to Positive Net Benefit**
+To achieve positive net benefit from model deployment, one or more of the following improvements is required:
+- **Precision above 50%** through further feature engineering, ensemble stacking, or cost-sensitive learning
+- **Cost-weighted threshold optimization** using Home Credit's actual business cost ratio of default loss vs rejected loan opportunity cost
+- **Segmented deployment** where the model is applied selectively to the High Risk and Very High Risk segments rather than the full portfolio, reducing opportunity cost while preserving most of the loss prevention benefit
+
 
 ## 🛠 Tech Stack
 
